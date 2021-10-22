@@ -1,0 +1,11 @@
+export { AggregateTeamArgs } from "./AggregateTeamArgs";
+export { CreateTeamArgs } from "./CreateTeamArgs";
+export { DeleteManyTeamArgs } from "./DeleteManyTeamArgs";
+export { DeleteTeamArgs } from "./DeleteTeamArgs";
+export { FindFirstTeamArgs } from "./FindFirstTeamArgs";
+export { FindManyTeamArgs } from "./FindManyTeamArgs";
+export { FindUniqueTeamArgs } from "./FindUniqueTeamArgs";
+export { GroupByTeamArgs } from "./GroupByTeamArgs";
+export { UpdateManyTeamArgs } from "./UpdateManyTeamArgs";
+export { UpdateTeamArgs } from "./UpdateTeamArgs";
+export { UpsertTeamArgs } from "./UpsertTeamArgs";

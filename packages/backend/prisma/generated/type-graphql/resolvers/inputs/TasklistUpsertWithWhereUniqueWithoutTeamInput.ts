@@ -1,0 +1,27 @@
+import * as TypeGraphQL from "type-graphql";
+import * as GraphQLScalars from "graphql-scalars";
+import { Prisma } from "@prisma/client";
+import { DecimalJSScalar } from "../../scalars";
+import { TaskListCreateWithoutTeamInput } from "../inputs/TaskListCreateWithoutTeamInput";
+import { TaskListUpdateWithoutTeamInput } from "../inputs/TaskListUpdateWithoutTeamInput";
+import { TaskListWhereUniqueInput } from "../inputs/TaskListWhereUniqueInput";
+
+@TypeGraphQL.InputType({
+  isAbstract: true
+})
+export class TaskListUpsertWithWhereUniqueWithoutTeamInput {
+  @TypeGraphQL.Field(_type => TaskListWhereUniqueInput, {
+    nullable: false
+  })
+  where!: TaskListWhereUniqueInput;
+
+  @TypeGraphQL.Field(_type => TaskListUpdateWithoutTeamInput, {
+    nullable: false
+  })
+  update!: TaskListUpdateWithoutTeamInput;
+
+  @TypeGraphQL.Field(_type => TaskListCreateWithoutTeamInput, {
+    nullable: false
+  })
+  create!: TaskListCreateWithoutTeamInput;
+}

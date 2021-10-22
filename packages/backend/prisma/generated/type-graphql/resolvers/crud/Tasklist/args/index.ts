@@ -1,0 +1,11 @@
+export { AggregateTaskListArgs } from "./AggregateTaskListArgs";
+export { CreateTaskListArgs } from "./CreateTaskListArgs";
+export { DeleteManyTaskListArgs } from "./DeleteManyTaskListArgs";
+export { DeleteTaskListArgs } from "./DeleteTaskListArgs";
+export { FindFirstTaskListArgs } from "./FindFirstTaskListArgs";
+export { FindManyTaskListArgs } from "./FindManyTaskListArgs";
+export { FindUniqueTaskListArgs } from "./FindUniqueTaskListArgs";
+export { GroupByTaskListArgs } from "./GroupByTaskListArgs";
+export { UpdateManyTaskListArgs } from "./UpdateManyTaskListArgs";
+export { UpdateTaskListArgs } from "./UpdateTaskListArgs";
+export { UpsertTaskListArgs } from "./UpsertTaskListArgs";
