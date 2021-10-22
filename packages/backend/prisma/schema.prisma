@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Team {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  name      String     @unique
+  tasklists Tasklist[]
+}
+
+model Tasklist {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name      String
+  tasks     Task[]
+  Team      Team?    @relation(fields: [teamId], references: [id])
+  teamId    Int?
+}
+
+model Task {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  name       String
+  completed  Boolean   @default(false)
+  Tasklist   Tasklist? @relation(fields: [tasklistId], references: [id])
+  tasklistId Int?
+}
