@@ -1351,7 +1351,7 @@ export type CreateTeamMutationVariables = Exact<{
 }>;
 
 
-export type CreateTeamMutation = { __typename?: 'Mutation', createTeam: { __typename?: 'Team', id: number, name: string, totalNumberOfOpenTasks: number } };
+export type CreateTeamMutation = { __typename?: 'Mutation', createTeam: { __typename?: 'Team', id: number, name: string } };
 
 export type GetAllTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1364,7 +1364,6 @@ export const CreateTeamDocument = gql`
   createTeam(data: {name: $teamName}) {
     id
     name
-    totalNumberOfOpenTasks
   }
 }
     `;
