@@ -4,11 +4,11 @@ import {Context} from "../index";
 
 @Resolver(of => Team)
 export class CustomTeamResolver {
-  @FieldResolver(type => Int, { nullable: false })
+  @FieldResolver(type => Int, {nullable: false})
   async totalNumberOfOpenTasks(@Root() team: Team,
-                               @Ctx() { prisma }: Context): Promise<number> {
+                               @Ctx() {prisma}: Context): Promise<number> {
     return await prisma.task.count({
-      where:{
+      where: {
         completed: false,
         AND: {
           Tasklist: {
