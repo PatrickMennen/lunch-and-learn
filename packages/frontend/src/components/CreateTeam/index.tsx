@@ -1,6 +1,7 @@
 import React, { FormEvent, useCallback, useState } from 'react';
 import gql from 'graphql-tag';
 import { useCreateTeamMutation } from '../../generated/graphql';
+import { Navigate } from 'react-router';
 
 gql`
   mutation createTeam($teamName: String!) {
@@ -37,14 +38,22 @@ export const CreateTeam = () => {
     [createTeam, name],
   );
 
+  if (data) {
+    return <Navigate to={`team/${data.createTeam.id}`} />;
+  }
+
   return (
     <>
       {loading && <p>Creating your team. One second please</p>}
       <form onSubmit={addTeamHandler}>
-        <input value={name} onChange={setNameHandler} className="text-4xl align-middle" />{' '}
+        <input
+          value={name}
+          onChange={setNameHandler}
+          className="text-4xl align-middle focus:ring-4"
+        />{' '}
         <button
           type="submit"
-          className="inline-block p-2 rounded text-white bg-blue-800 shadow-md"
+          className="inline-block p-2 rounded text-white bg-blue-800 shadow-md focus:ring-2"
           disabled={loading}
         >
           Create your own team

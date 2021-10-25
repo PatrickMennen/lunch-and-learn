@@ -1,6 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { useGetAllTeamsQuery } from '../../generated/graphql';
+import { NavLink } from '../../components/NavLink';
 
 gql`
   query getAllTeams {
@@ -8,6 +9,7 @@ gql`
       id
       name
       totalNumberOfOpenTasks
+      totalNumberOfTasks
     }
   }
 `;
@@ -29,22 +31,21 @@ export const TeamsList: React.FC = () => {
   }
 
   if (!data) {
-    return <p>No teams found, would you like to create one?</p>;
+    return null;
   }
 
   return (
     <ul>
       {data.teams.map((team) => (
-        <li
-          className="justify-center bg-blue-800 text-blue-100 p-2 flex justify-start"
-          key={team.id}
-        >
-          {team.name}
-          {team.totalNumberOfOpenTasks > 0 && (
-            <span className="inline-block ml-auto bg-red-400 text-center p-1">
-              {team.totalNumberOfOpenTasks} open task(s)
-            </span>
-          )}
+        <li key={team.id}>
+          <NavLink to={`/team/${team.id}`}>
+            {team.name}
+            {team.totalNumberOfOpenTasks > 0 && (
+              <span className="inline-block bg-red-400 p-1 rounded ml-auto">
+                {team.totalNumberOfOpenTasks} / {team.totalNumberOfTasks}
+              </span>
+            )}
+          </NavLink>
         </li>
       ))}
     </ul>

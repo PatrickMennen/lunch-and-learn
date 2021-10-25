@@ -1152,7 +1152,9 @@ export type Team = {
   id: Scalars['Int'];
   name: Scalars['String'];
   tasklists: Array<TaskList>;
+  totalNumberOfCompletedTasks: Scalars['Int'];
   totalNumberOfOpenTasks: Scalars['Int'];
+  totalNumberOfTasks: Scalars['Int'];
 };
 
 
@@ -1353,10 +1355,24 @@ export type CreateTeamMutationVariables = Exact<{
 
 export type CreateTeamMutation = { __typename?: 'Mutation', createTeam: { __typename?: 'Team', id: number, name: string } };
 
+export type GetTaskListsForTeamQueryVariables = Exact<{
+  teamId: Scalars['Int'];
+}>;
+
+
+export type GetTaskListsForTeamQuery = { __typename?: 'Query', taskLists: Array<{ __typename?: 'TaskList', id: number, name: string, tasks: Array<{ __typename?: 'Task', id: number, label: string, completed: boolean }> }> };
+
+export type GetTeamDetailsQueryVariables = Exact<{
+  teamId?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type GetTeamDetailsQuery = { __typename?: 'Query', team?: { __typename?: 'Team', id: number, name: string } | null | undefined };
+
 export type GetAllTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllTeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, totalNumberOfOpenTasks: number }> };
+export type GetAllTeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, totalNumberOfOpenTasks: number, totalNumberOfTasks: number }> };
 
 
 export const CreateTeamDocument = gql`
@@ -1393,12 +1409,90 @@ export function useCreateTeamMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateTeamMutationHookResult = ReturnType<typeof useCreateTeamMutation>;
 export type CreateTeamMutationResult = Apollo.MutationResult<CreateTeamMutation>;
 export type CreateTeamMutationOptions = Apollo.BaseMutationOptions<CreateTeamMutation, CreateTeamMutationVariables>;
+export const GetTaskListsForTeamDocument = gql`
+    query getTaskListsForTeam($teamId: Int!) {
+  taskLists(where: {teamId: {equals: $teamId}}) {
+    id
+    name
+    tasks {
+      id
+      label
+      completed
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetTaskListsForTeamQuery__
+ *
+ * To run a query within a React component, call `useGetTaskListsForTeamQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTaskListsForTeamQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTaskListsForTeamQuery({
+ *   variables: {
+ *      teamId: // value for 'teamId'
+ *   },
+ * });
+ */
+export function useGetTaskListsForTeamQuery(baseOptions: Apollo.QueryHookOptions<GetTaskListsForTeamQuery, GetTaskListsForTeamQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTaskListsForTeamQuery, GetTaskListsForTeamQueryVariables>(GetTaskListsForTeamDocument, options);
+      }
+export function useGetTaskListsForTeamLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTaskListsForTeamQuery, GetTaskListsForTeamQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTaskListsForTeamQuery, GetTaskListsForTeamQueryVariables>(GetTaskListsForTeamDocument, options);
+        }
+export type GetTaskListsForTeamQueryHookResult = ReturnType<typeof useGetTaskListsForTeamQuery>;
+export type GetTaskListsForTeamLazyQueryHookResult = ReturnType<typeof useGetTaskListsForTeamLazyQuery>;
+export type GetTaskListsForTeamQueryResult = Apollo.QueryResult<GetTaskListsForTeamQuery, GetTaskListsForTeamQueryVariables>;
+export const GetTeamDetailsDocument = gql`
+    query getTeamDetails($teamId: Int) {
+  team(where: {id: $teamId}) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetTeamDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetTeamDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTeamDetailsQuery({
+ *   variables: {
+ *      teamId: // value for 'teamId'
+ *   },
+ * });
+ */
+export function useGetTeamDetailsQuery(baseOptions?: Apollo.QueryHookOptions<GetTeamDetailsQuery, GetTeamDetailsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTeamDetailsQuery, GetTeamDetailsQueryVariables>(GetTeamDetailsDocument, options);
+      }
+export function useGetTeamDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTeamDetailsQuery, GetTeamDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTeamDetailsQuery, GetTeamDetailsQueryVariables>(GetTeamDetailsDocument, options);
+        }
+export type GetTeamDetailsQueryHookResult = ReturnType<typeof useGetTeamDetailsQuery>;
+export type GetTeamDetailsLazyQueryHookResult = ReturnType<typeof useGetTeamDetailsLazyQuery>;
+export type GetTeamDetailsQueryResult = Apollo.QueryResult<GetTeamDetailsQuery, GetTeamDetailsQueryVariables>;
 export const GetAllTeamsDocument = gql`
     query getAllTeams {
   teams {
     id
     name
     totalNumberOfOpenTasks
+    totalNumberOfTasks
   }
 }
     `;

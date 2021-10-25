@@ -33,10 +33,15 @@ export class CustomTeamResolver {
     });
   }
 
-  async totalNumberOfClosedTasks(@Root() team: Team, @Ctx() { prisma }: Context): Promise<number> {
+  @FieldResolver((type) => Int, { nullable: false })
+  async totalNumberOfCompletedTasks(
+    @Root() team: Team,
+    @Ctx() { prisma }: Context,
+  ): Promise<number> {
     return await numberOfTasksForTeamQuery(prisma, team.id, true);
   }
 
+  @FieldResolver((type) => Int, { nullable: false })
   async totalNumberOfOpenTasks(@Root() team: Team, @Ctx() { prisma }: Context): Promise<number> {
     return await numberOfTasksForTeamQuery(prisma, team.id);
   }
