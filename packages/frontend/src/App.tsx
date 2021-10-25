@@ -13,7 +13,7 @@ export const App: React.FC = () => {
         </aside>
 
         <Routes>
-          <Route path="team/:teamId" element={<TeamOverview />} />
+          <Route path="team/:teamId/*" element={<TeamOverview />} />
 
           <Route path="/" element={<Home />} />
         </Routes>

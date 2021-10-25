@@ -32,7 +32,7 @@ export const TeamOverview: React.FC = () => {
 
           <Routes>
             <Route path="/" element={<TaskListList />} />
-            <Route path="/tasks/:tasklistId" element={<TaskListOverview />} />
+            <Route path="/tasks/:taskListId" element={<TaskListOverview />} />
           </Routes>
         </>
       )}

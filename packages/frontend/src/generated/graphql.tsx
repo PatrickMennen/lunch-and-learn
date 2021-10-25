@@ -1348,6 +1348,14 @@ export type TeamWhereUniqueInput = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type AddTaskListMutationVariables = Exact<{
+  name: Scalars['String'];
+  teamId: Scalars['Int'];
+}>;
+
+
+export type AddTaskListMutation = { __typename?: 'Mutation', createTaskList: { __typename?: 'TaskList', id: number } };
+
 export type CreateTeamMutationVariables = Exact<{
   teamName: Scalars['String'];
 }>;
@@ -1362,6 +1370,13 @@ export type GetTaskListsForTeamQueryVariables = Exact<{
 
 export type GetTaskListsForTeamQuery = { __typename?: 'Query', taskLists: Array<{ __typename?: 'TaskList', id: number, name: string, tasks: Array<{ __typename?: 'Task', id: number, label: string, completed: boolean }> }> };
 
+export type TaskListDetailsQueryVariables = Exact<{
+  taskListId: Scalars['Int'];
+}>;
+
+
+export type TaskListDetailsQuery = { __typename?: 'Query', taskList?: { __typename?: 'TaskList', id: number, name: string, tasks: Array<{ __typename?: 'Task', id: number, label: string, completed: boolean }> } | null | undefined };
+
 export type GetTeamDetailsQueryVariables = Exact<{
   teamId?: Maybe<Scalars['Int']>;
 }>;
@@ -1375,6 +1390,40 @@ export type GetAllTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAllTeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, totalNumberOfOpenTasks: number, totalNumberOfTasks: number }> };
 
 
+export const AddTaskListDocument = gql`
+    mutation addTaskList($name: String!, $teamId: Int!) {
+  createTaskList(data: {name: $name, Team: {connect: {id: $teamId}}}) {
+    id
+  }
+}
+    `;
+export type AddTaskListMutationFn = Apollo.MutationFunction<AddTaskListMutation, AddTaskListMutationVariables>;
+
+/**
+ * __useAddTaskListMutation__
+ *
+ * To run a mutation, you first call `useAddTaskListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTaskListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTaskListMutation, { data, loading, error }] = useAddTaskListMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      teamId: // value for 'teamId'
+ *   },
+ * });
+ */
+export function useAddTaskListMutation(baseOptions?: Apollo.MutationHookOptions<AddTaskListMutation, AddTaskListMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddTaskListMutation, AddTaskListMutationVariables>(AddTaskListDocument, options);
+      }
+export type AddTaskListMutationHookResult = ReturnType<typeof useAddTaskListMutation>;
+export type AddTaskListMutationResult = Apollo.MutationResult<AddTaskListMutation>;
+export type AddTaskListMutationOptions = Apollo.BaseMutationOptions<AddTaskListMutation, AddTaskListMutationVariables>;
 export const CreateTeamDocument = gql`
     mutation createTeam($teamName: String!) {
   createTeam(data: {name: $teamName}) {
@@ -1450,6 +1499,47 @@ export function useGetTaskListsForTeamLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type GetTaskListsForTeamQueryHookResult = ReturnType<typeof useGetTaskListsForTeamQuery>;
 export type GetTaskListsForTeamLazyQueryHookResult = ReturnType<typeof useGetTaskListsForTeamLazyQuery>;
 export type GetTaskListsForTeamQueryResult = Apollo.QueryResult<GetTaskListsForTeamQuery, GetTaskListsForTeamQueryVariables>;
+export const TaskListDetailsDocument = gql`
+    query taskListDetails($taskListId: Int!) {
+  taskList(where: {id: $taskListId}) {
+    id
+    name
+    tasks {
+      id
+      label
+      completed
+    }
+  }
+}
+    `;
+
+/**
+ * __useTaskListDetailsQuery__
+ *
+ * To run a query within a React component, call `useTaskListDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTaskListDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTaskListDetailsQuery({
+ *   variables: {
+ *      taskListId: // value for 'taskListId'
+ *   },
+ * });
+ */
+export function useTaskListDetailsQuery(baseOptions: Apollo.QueryHookOptions<TaskListDetailsQuery, TaskListDetailsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TaskListDetailsQuery, TaskListDetailsQueryVariables>(TaskListDetailsDocument, options);
+      }
+export function useTaskListDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TaskListDetailsQuery, TaskListDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TaskListDetailsQuery, TaskListDetailsQueryVariables>(TaskListDetailsDocument, options);
+        }
+export type TaskListDetailsQueryHookResult = ReturnType<typeof useTaskListDetailsQuery>;
+export type TaskListDetailsLazyQueryHookResult = ReturnType<typeof useTaskListDetailsLazyQuery>;
+export type TaskListDetailsQueryResult = Apollo.QueryResult<TaskListDetailsQuery, TaskListDetailsQueryVariables>;
 export const GetTeamDetailsDocument = gql`
     query getTeamDetails($teamId: Int) {
   team(where: {id: $teamId}) {

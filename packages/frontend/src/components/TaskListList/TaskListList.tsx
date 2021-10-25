@@ -44,16 +44,14 @@ export const TaskListList: React.FC = () => {
         {data.taskLists.length > 0 && (
           <ul>
             {data.taskLists.map((list) => (
-              <li>
-                <Link key={list.name} to={`tasks/${list.id}`}>
-                  {list.name}
-                </Link>
+              <li key={list.name}>
+                <Link to={`tasks/${list.id}`}>{list.name}</Link>
               </li>
             ))}
           </ul>
         )}
 
-        <CreateTaskList teamId={Number(teamId)} />
+        <CreateTaskList />
       </>
     );
   }
