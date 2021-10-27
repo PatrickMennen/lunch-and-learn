@@ -8,6 +8,8 @@ const numberOfTasksForTeamQuery = async (
   teamId: number,
   completed = false,
 ) => {
+  console.log('prisma', prisma, prisma.task, teamId);
+
   return await prisma.task.count({
     where: {
       completed,

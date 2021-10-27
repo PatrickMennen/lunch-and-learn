@@ -608,6 +608,11 @@ export type StringWithAggregatesFilter = {
   startsWith?: Maybe<Scalars['String']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  createdTeam: Team;
+};
+
 export type Task = {
   __typename?: 'Task';
   Tasklist?: Maybe<TaskList>;
@@ -1389,6 +1394,11 @@ export type GetAllTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllTeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, totalNumberOfOpenTasks: number, totalNumberOfTasks: number }> };
 
+export type TeamCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TeamCreatedSubscription = { __typename?: 'Subscription', createdTeam: { __typename?: 'Team', id: number, name: string } };
+
 
 export const AddTaskListDocument = gql`
     mutation addTaskList($name: String!, $teamId: Int!) {
@@ -1578,7 +1588,7 @@ export type GetTeamDetailsLazyQueryHookResult = ReturnType<typeof useGetTeamDeta
 export type GetTeamDetailsQueryResult = Apollo.QueryResult<GetTeamDetailsQuery, GetTeamDetailsQueryVariables>;
 export const GetAllTeamsDocument = gql`
     query getAllTeams {
-  teams {
+  teams(orderBy: {name: asc}) {
     id
     name
     totalNumberOfOpenTasks
@@ -1613,3 +1623,33 @@ export function useGetAllTeamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetAllTeamsQueryHookResult = ReturnType<typeof useGetAllTeamsQuery>;
 export type GetAllTeamsLazyQueryHookResult = ReturnType<typeof useGetAllTeamsLazyQuery>;
 export type GetAllTeamsQueryResult = Apollo.QueryResult<GetAllTeamsQuery, GetAllTeamsQueryVariables>;
+export const TeamCreatedDocument = gql`
+    subscription teamCreated {
+  createdTeam {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useTeamCreatedSubscription__
+ *
+ * To run a query within a React component, call `useTeamCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useTeamCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeamCreatedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTeamCreatedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<TeamCreatedSubscription, TeamCreatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<TeamCreatedSubscription, TeamCreatedSubscriptionVariables>(TeamCreatedDocument, options);
+      }
+export type TeamCreatedSubscriptionHookResult = ReturnType<typeof useTeamCreatedSubscription>;
+export type TeamCreatedSubscriptionResult = Apollo.SubscriptionResult<TeamCreatedSubscription>;

@@ -1,21 +1,33 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { useGetAllTeamsQuery } from '../../generated/graphql';
+import { useGetAllTeamsQuery, useTeamCreatedSubscription } from '../../generated/graphql';
 import { NavLink } from '../../components/NavLink';
 
 gql`
   query getAllTeams {
-    teams {
+    teams(orderBy: { name: asc }) {
       id
       name
       totalNumberOfOpenTasks
       totalNumberOfTasks
     }
   }
+
+  subscription teamCreated {
+    createdTeam {
+      id
+      name
+    }
+  }
 `;
 
 export const TeamsList: React.FC = () => {
-  const { error, loading, data } = useGetAllTeamsQuery();
+  const { error, loading, data, refetch } = useGetAllTeamsQuery();
+  useTeamCreatedSubscription({
+    onSubscriptionData: () => {
+      refetch();
+    },
+  });
 
   if (loading) {
     return <p>Loading teams...</p>;
