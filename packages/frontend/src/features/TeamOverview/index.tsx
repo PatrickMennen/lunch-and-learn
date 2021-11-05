@@ -22,12 +22,12 @@ export const TeamOverview: React.FC = () => {
   });
 
   return (
-    <section className="col-span-10 bg-gray-200 p-4">
+    <section className="col-span-10 bg-gray-200 p-4 shadow-md">
       {loading || (!data && <p>Loading team overview</p>)}
       {error && <p>Could not load team with id ${teamId}</p>}
       {data && data.team && (
         <>
-          <h1 className="text-4xl border-b-2 border-blue-400">{data.team.name}</h1>
+          <h1 className="text-4xl border-b-2 border-blue-400 m-y4">{data.team.name}</h1>
           <Outlet />
 
           <Routes>

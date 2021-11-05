@@ -3,6 +3,7 @@ import { TeamsList } from './features/Teams';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { TeamOverview } from './features/TeamOverview';
 import { Home } from './features/Home';
+import { PageNotFound } from './features/404';
 
 export const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ export const App: React.FC = () => {
           <Route path="team/:teamId/*" element={<TeamOverview />} />
 
           <Route path="/" element={<Home />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>
     </Router>

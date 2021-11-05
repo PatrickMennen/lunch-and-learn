@@ -30,7 +30,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "build:graphql": "graphql-codegen --config codegen.yml"
+    "build-graphql": "graphql-codegen --config codegen.yml"
   },
   "eslintConfig": {
     "extends": [

@@ -1,50 +1,47 @@
+import { gql } from 'graphql-tag';
 import React, { FormEvent, useCallback, useState } from 'react';
-import gql from 'graphql-tag';
-import { useCreateTeamMutation } from '../../generated/graphql';
-import { Navigate } from 'react-router';
+import { useCreateTaskMutation } from '../../generated/graphql';
+import { useParams } from 'react-router-dom';
 
 gql`
-  mutation createTeam($teamName: String!) {
-    createTeam(data: { name: $teamName }) {
+  mutation createTask($tasklistId: Int, $label: String!) {
+    createTask(data: { label: $label, Tasklist: { connect: { id: $tasklistId } } }) {
       id
-      name
     }
   }
 `;
 
-export const CreateTeam = () => {
+export const CreateTask: React.FC = () => {
   const [name, setName] = useState<string>('');
+  const { taskListId } = useParams();
 
   const setNameHandler = useCallback((event: FormEvent<HTMLInputElement>) => {
     setName(event.currentTarget.value);
   }, []);
 
-  const [createTeam, { loading, data, error }] = useCreateTeamMutation();
+  const [createTask, { loading, error }] = useCreateTaskMutation();
 
-  const addTeamHandler = useCallback(
+  const addTaskHandler = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       try {
-        await createTeam({
+        await createTask({
           variables: {
-            teamName: name,
+            tasklistId: Number(taskListId),
+            label: name,
           },
         });
         setName('');
       } catch (e) {}
     },
 
-    [createTeam, name],
+    [createTask, name, taskListId],
   );
-
-  if (data) {
-    return <Navigate to={`team/${data.createTeam.id}`} />;
-  }
 
   return (
     <>
-      {loading && <p>Creating your team. One second please</p>}
-      <form onSubmit={addTeamHandler}>
+      {loading && <p>Creating your task</p>}
+      <form onSubmit={addTaskHandler}>
         <input
           value={name}
           onChange={setNameHandler}
@@ -55,7 +52,7 @@ export const CreateTeam = () => {
           className="inline-block p-2 rounded text-white bg-blue-800 shadow-md focus:ring-2"
           disabled={loading}
         >
-          Create your own team
+          Add task
         </button>
         {error && <p className="text-red-700 font-bold">{error.message}</p>}
       </form>

@@ -36,16 +36,23 @@ export const TaskListList: React.FC = () => {
   if (data) {
     return (
       <>
-        <h2 className="text-2xl m-y4">Task lists</h2>
+        <h2 className="text-2xl my-4">Task lists</h2>
         {data.taskLists.length === 0 && (
-          <p className="m-y4">There are no task lists for this specific team, yet...</p>
+          <p className="bg-white p-4 shadow-xl my-4">
+            There are no task lists for this specific team, yet...
+          </p>
         )}
 
         {data.taskLists.length > 0 && (
-          <ul>
+          <ul className="p-4 bg-white mb-4 shadow-md">
             {data.taskLists.map((list) => (
               <li key={list.name}>
-                <Link to={`tasks/${list.id}`}>{list.name}</Link>
+                <Link
+                  className="block p-2 border-b-2 border-gray-300 hover:bg-gray-200 "
+                  to={`tasks/${list.id}`}
+                >
+                  {list.name}
+                </Link>
               </li>
             ))}
           </ul>

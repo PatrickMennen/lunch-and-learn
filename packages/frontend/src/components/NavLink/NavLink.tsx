@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useMatch, useResolvedPath } from 'react-router-dom';
 
 type NavLinkProps = {
@@ -7,23 +7,25 @@ type NavLinkProps = {
   activeOnlyWhenExact?: boolean;
 };
 
-export const NavLink: React.FC<NavLinkProps> = ({ children, to, activeOnlyWhenExact = false }) => {
-  const resolved = useResolvedPath(to);
-  const match = useMatch({
-    path: resolved.pathname,
-    end: activeOnlyWhenExact,
-  });
+export const NavLink: React.FC<NavLinkProps> = memo(
+  ({ children, to, activeOnlyWhenExact = false }) => {
+    const resolved = useResolvedPath(to);
+    const match = useMatch({
+      path: resolved.pathname,
+      end: activeOnlyWhenExact,
+    });
 
-  const classNames = useMemo(() => {
-    const classNames = 'items-center text-blue-100 p-2 flex justify-start hover:bg-blue-800';
-    const active = 'bg-blue-400 text-green-100';
+    const classNames = useMemo(() => {
+      const classNames = `items-center text-blue-200 p-2 flex justify-start hover:bg-blue-800`;
+      const active = 'bg-blue-400 hover:text-blue-100';
 
-    return match ? active + ' ' + classNames : classNames;
-  }, [match]);
+      return match ? `${active} ${classNames}` : classNames;
+    }, [match]);
 
-  return (
-    <Link className={classNames} to={to}>
-      {children}
-    </Link>
-  );
-};
+    return (
+      <Link className={classNames} to={to}>
+        {children}
+      </Link>
+    );
+  },
+);

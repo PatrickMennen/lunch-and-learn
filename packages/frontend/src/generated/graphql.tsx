@@ -1353,6 +1353,14 @@ export type TeamWhereUniqueInput = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type CreateTaskMutationVariables = Exact<{
+  tasklistId?: Maybe<Scalars['Int']>;
+  label: Scalars['String'];
+}>;
+
+
+export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __typename?: 'Task', id: number } };
+
 export type AddTaskListMutationVariables = Exact<{
   name: Scalars['String'];
   teamId: Scalars['Int'];
@@ -1367,6 +1375,21 @@ export type CreateTeamMutationVariables = Exact<{
 
 
 export type CreateTeamMutation = { __typename?: 'Mutation', createTeam: { __typename?: 'Team', id: number, name: string } };
+
+export type GetTaskDetailsQueryVariables = Exact<{
+  taskId?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type GetTaskDetailsQuery = { __typename?: 'Query', task?: { __typename?: 'Task', id: number, label: string, completed: boolean } | null | undefined };
+
+export type SetTaskCompletedMutationVariables = Exact<{
+  id?: Maybe<Scalars['Int']>;
+  completed?: Maybe<Scalars['Boolean']>;
+}>;
+
+
+export type SetTaskCompletedMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'Task', id: number, completed: boolean } | null | undefined };
 
 export type GetTaskListsForTeamQueryVariables = Exact<{
   teamId: Scalars['Int'];
@@ -1400,6 +1423,40 @@ export type TeamCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 export type TeamCreatedSubscription = { __typename?: 'Subscription', createdTeam: { __typename?: 'Team', id: number, name: string } };
 
 
+export const CreateTaskDocument = gql`
+    mutation createTask($tasklistId: Int, $label: String!) {
+  createTask(data: {label: $label, Tasklist: {connect: {id: $tasklistId}}}) {
+    id
+  }
+}
+    `;
+export type CreateTaskMutationFn = Apollo.MutationFunction<CreateTaskMutation, CreateTaskMutationVariables>;
+
+/**
+ * __useCreateTaskMutation__
+ *
+ * To run a mutation, you first call `useCreateTaskMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTaskMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTaskMutation, { data, loading, error }] = useCreateTaskMutation({
+ *   variables: {
+ *      tasklistId: // value for 'tasklistId'
+ *      label: // value for 'label'
+ *   },
+ * });
+ */
+export function useCreateTaskMutation(baseOptions?: Apollo.MutationHookOptions<CreateTaskMutation, CreateTaskMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTaskMutation, CreateTaskMutationVariables>(CreateTaskDocument, options);
+      }
+export type CreateTaskMutationHookResult = ReturnType<typeof useCreateTaskMutation>;
+export type CreateTaskMutationResult = Apollo.MutationResult<CreateTaskMutation>;
+export type CreateTaskMutationOptions = Apollo.BaseMutationOptions<CreateTaskMutation, CreateTaskMutationVariables>;
 export const AddTaskListDocument = gql`
     mutation addTaskList($name: String!, $teamId: Int!) {
   createTaskList(data: {name: $name, Team: {connect: {id: $teamId}}}) {
@@ -1468,6 +1525,78 @@ export function useCreateTeamMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateTeamMutationHookResult = ReturnType<typeof useCreateTeamMutation>;
 export type CreateTeamMutationResult = Apollo.MutationResult<CreateTeamMutation>;
 export type CreateTeamMutationOptions = Apollo.BaseMutationOptions<CreateTeamMutation, CreateTeamMutationVariables>;
+export const GetTaskDetailsDocument = gql`
+    query getTaskDetails($taskId: Int) {
+  task(where: {id: $taskId}) {
+    id
+    label
+    completed
+  }
+}
+    `;
+
+/**
+ * __useGetTaskDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetTaskDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTaskDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTaskDetailsQuery({
+ *   variables: {
+ *      taskId: // value for 'taskId'
+ *   },
+ * });
+ */
+export function useGetTaskDetailsQuery(baseOptions?: Apollo.QueryHookOptions<GetTaskDetailsQuery, GetTaskDetailsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTaskDetailsQuery, GetTaskDetailsQueryVariables>(GetTaskDetailsDocument, options);
+      }
+export function useGetTaskDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTaskDetailsQuery, GetTaskDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTaskDetailsQuery, GetTaskDetailsQueryVariables>(GetTaskDetailsDocument, options);
+        }
+export type GetTaskDetailsQueryHookResult = ReturnType<typeof useGetTaskDetailsQuery>;
+export type GetTaskDetailsLazyQueryHookResult = ReturnType<typeof useGetTaskDetailsLazyQuery>;
+export type GetTaskDetailsQueryResult = Apollo.QueryResult<GetTaskDetailsQuery, GetTaskDetailsQueryVariables>;
+export const SetTaskCompletedDocument = gql`
+    mutation setTaskCompleted($id: Int, $completed: Boolean) {
+  updateTask(data: {completed: {set: $completed}}, where: {id: $id}) {
+    id
+    completed
+  }
+}
+    `;
+export type SetTaskCompletedMutationFn = Apollo.MutationFunction<SetTaskCompletedMutation, SetTaskCompletedMutationVariables>;
+
+/**
+ * __useSetTaskCompletedMutation__
+ *
+ * To run a mutation, you first call `useSetTaskCompletedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetTaskCompletedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setTaskCompletedMutation, { data, loading, error }] = useSetTaskCompletedMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      completed: // value for 'completed'
+ *   },
+ * });
+ */
+export function useSetTaskCompletedMutation(baseOptions?: Apollo.MutationHookOptions<SetTaskCompletedMutation, SetTaskCompletedMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetTaskCompletedMutation, SetTaskCompletedMutationVariables>(SetTaskCompletedDocument, options);
+      }
+export type SetTaskCompletedMutationHookResult = ReturnType<typeof useSetTaskCompletedMutation>;
+export type SetTaskCompletedMutationResult = Apollo.MutationResult<SetTaskCompletedMutation>;
+export type SetTaskCompletedMutationOptions = Apollo.BaseMutationOptions<SetTaskCompletedMutation, SetTaskCompletedMutationVariables>;
 export const GetTaskListsForTeamDocument = gql`
     query getTaskListsForTeam($teamId: Int!) {
   taskLists(where: {teamId: {equals: $teamId}}) {
