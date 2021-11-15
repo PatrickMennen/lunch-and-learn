@@ -1,6 +1,5 @@
 import {
   UpdateTaskResolver as GeneratedTaskResolver,
-  Team,
   UpdateTaskArgs,
   Task,
   FindManyTaskArgs,

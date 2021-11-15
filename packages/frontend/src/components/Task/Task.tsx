@@ -1,6 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
 import gql from 'graphql-tag';
-import { useGetTaskDetailsQuery, useSetTaskCompletedMutation } from '../../generated/graphql';
+import {
+  useGetTaskDetailsQuery,
+  useSetTaskCompletedMutation,
+  useTaskUpdatedSubscription,
+} from '../../generated/graphql';
 
 gql`
   query getTaskDetails($taskId: Int) {
@@ -17,6 +21,14 @@ gql`
       completed
     }
   }
+
+  subscription taskUpdated($taskId: Int!) {
+    updatedTask(where: { id: { equals: $taskId } }) {
+      id
+      label
+      completed
+    }
+  }
 `;
 
 type TaskProps = {
@@ -26,14 +38,15 @@ type TaskProps = {
 export const Task: React.FC<TaskProps> = ({ taskId }) => {
   const { loading, data } = useGetTaskDetailsQuery({ variables: { taskId } });
   const [updateTask] = useSetTaskCompletedMutation();
+  useTaskUpdatedSubscription({ variables: { taskId } });
 
   const taskClasses = useMemo(() => {
     if (!data) {
       return;
     }
 
-    const completed = data.task!.completed ? 'line-through text-gray-300' : null;
-    return `text-xl border-b-2 py-2 ${completed}`;
+    const completed = data.task!.completed ? 'line-through text-gray-300' : '';
+    return `text-xl border-b-2 py-2 cursor-pointer ${completed}`;
   }, [data]);
 
   const updateTaskHandler = useCallback(() => {
@@ -47,15 +60,15 @@ export const Task: React.FC<TaskProps> = ({ taskId }) => {
         completed: !data.task!.completed,
       },
     });
-  }, [data]);
+  }, [data, taskId, updateTask]);
 
-  if (loading || !data) {
+  if (loading || !data || !data.task) {
     return null;
   }
 
   return (
     <li onClick={updateTaskHandler} className={taskClasses}>
-      {data.task!.label}
+      {data.task.label}
     </li>
   );
 };

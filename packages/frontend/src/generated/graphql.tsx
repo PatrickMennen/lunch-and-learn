@@ -614,6 +614,16 @@ export type Subscription = {
   updatedTask: Task;
 };
 
+
+export type SubscriptionUpdatedTaskArgs = {
+  cursor?: Maybe<TaskWhereUniqueInput>;
+  distinct?: Maybe<Array<TaskScalarFieldEnum>>;
+  orderBy?: Maybe<Array<TaskOrderByWithRelationInput>>;
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+  where?: Maybe<TaskWhereInput>;
+};
+
 export type Task = {
   __typename?: 'Task';
   Tasklist?: Maybe<TaskList>;
@@ -1392,6 +1402,13 @@ export type SetTaskCompletedMutationVariables = Exact<{
 
 export type SetTaskCompletedMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: number, completed: boolean } };
 
+export type TaskUpdatedSubscriptionVariables = Exact<{
+  taskId: Scalars['Int'];
+}>;
+
+
+export type TaskUpdatedSubscription = { __typename?: 'Subscription', updatedTask: { __typename?: 'Task', id: number, label: string, completed: boolean } };
+
 export type GetTaskListsForTeamQueryVariables = Exact<{
   teamId: Scalars['Int'];
 }>;
@@ -1598,6 +1615,38 @@ export function useSetTaskCompletedMutation(baseOptions?: Apollo.MutationHookOpt
 export type SetTaskCompletedMutationHookResult = ReturnType<typeof useSetTaskCompletedMutation>;
 export type SetTaskCompletedMutationResult = Apollo.MutationResult<SetTaskCompletedMutation>;
 export type SetTaskCompletedMutationOptions = Apollo.BaseMutationOptions<SetTaskCompletedMutation, SetTaskCompletedMutationVariables>;
+export const TaskUpdatedDocument = gql`
+    subscription taskUpdated($taskId: Int!) {
+  updatedTask(where: {id: {equals: $taskId}}) {
+    id
+    label
+    completed
+  }
+}
+    `;
+
+/**
+ * __useTaskUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useTaskUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useTaskUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTaskUpdatedSubscription({
+ *   variables: {
+ *      taskId: // value for 'taskId'
+ *   },
+ * });
+ */
+export function useTaskUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<TaskUpdatedSubscription, TaskUpdatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<TaskUpdatedSubscription, TaskUpdatedSubscriptionVariables>(TaskUpdatedDocument, options);
+      }
+export type TaskUpdatedSubscriptionHookResult = ReturnType<typeof useTaskUpdatedSubscription>;
+export type TaskUpdatedSubscriptionResult = Apollo.SubscriptionResult<TaskUpdatedSubscription>;
 export const GetTaskListsForTeamDocument = gql`
     query getTaskListsForTeam($teamId: Int!) {
   taskLists(where: {teamId: {equals: $teamId}}) {
