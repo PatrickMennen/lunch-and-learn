@@ -1787,9 +1787,13 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "Task",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Task",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -5456,6 +5460,22 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "Team",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updatedTask",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Task",
                 "ofType": null
               }
             },

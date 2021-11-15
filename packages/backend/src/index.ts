@@ -10,20 +10,23 @@ import http from 'http';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { pubSub } from '../pubSub';
+import { CreateTaskResolver } from './TaskResolver/CreateTaskResolver';
 
 export interface Context {
   prisma: PrismaClient;
 }
+export const prisma = new PrismaClient();
 
 const main = async () => {
   const app = express();
   const httpServer = http.createServer(app);
 
   const schema = await buildSchema({
-    resolvers: [...resolvers, CreateTeamResolver, CustomTeamResolver],
+    resolvers: [...resolvers, CreateTeamResolver, CustomTeamResolver, CreateTaskResolver],
     validate: false,
+    pubSub,
   });
-  const prisma = new PrismaClient();
 
   const subScriptionServer = SubscriptionServer.create(
     {

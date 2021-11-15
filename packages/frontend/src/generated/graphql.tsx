@@ -162,7 +162,7 @@ export type Mutation = {
   updateManyTask: AffectedRowsOutput;
   updateManyTaskList: AffectedRowsOutput;
   updateManyTeam: AffectedRowsOutput;
-  updateTask?: Maybe<Task>;
+  updateTask: Task;
   updateTaskList?: Maybe<TaskList>;
   updateTeam?: Maybe<Team>;
   upsertTask: Task;
@@ -611,6 +611,7 @@ export type StringWithAggregatesFilter = {
 export type Subscription = {
   __typename?: 'Subscription';
   createdTeam: Team;
+  updatedTask: Task;
 };
 
 export type Task = {
@@ -1389,7 +1390,7 @@ export type SetTaskCompletedMutationVariables = Exact<{
 }>;
 
 
-export type SetTaskCompletedMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'Task', id: number, completed: boolean } | null | undefined };
+export type SetTaskCompletedMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: number, completed: boolean } };
 
 export type GetTaskListsForTeamQueryVariables = Exact<{
   teamId: Scalars['Int'];

@@ -20,11 +20,11 @@ const numberOfTasksForTeamQuery = async (
   });
 };
 
-@Resolver((of) => Team)
+@Resolver((_of) => Team)
 export class CustomTeamResolver {
   @FieldResolver((type) => Int, { nullable: false })
   async totalNumberOfTasks(@Root() team: Team, @Ctx() { prisma }: Context): Promise<number> {
-    return await prisma.task.count({
+    return prisma.task.count({
       where: {
         Tasklist: {
           teamId: team.id,
@@ -38,11 +38,11 @@ export class CustomTeamResolver {
     @Root() team: Team,
     @Ctx() { prisma }: Context,
   ): Promise<number> {
-    return await numberOfTasksForTeamQuery(prisma, team.id, true);
+    return numberOfTasksForTeamQuery(prisma, team.id, true);
   }
 
   @FieldResolver((type) => Int, { nullable: false })
   async totalNumberOfOpenTasks(@Root() team: Team, @Ctx() { prisma }: Context): Promise<number> {
-    return await numberOfTasksForTeamQuery(prisma, team.id);
+    return numberOfTasksForTeamQuery(prisma, team.id);
   }
 }
