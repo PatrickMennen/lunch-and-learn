@@ -11,7 +11,11 @@ gql`
   }
 `;
 
-export const CreateTask: React.FC = () => {
+type CreateTaskProps = {
+  refetch: () => void;
+};
+
+export const CreateTask: React.FC<CreateTaskProps> = ({ refetch }) => {
   const [name, setName] = useState<string>('');
   const { taskListId } = useParams();
 
@@ -32,10 +36,11 @@ export const CreateTask: React.FC = () => {
           },
         });
         setName('');
+        refetch();
       } catch (e) {}
     },
 
-    [createTask, name, taskListId],
+    [createTask, name, taskListId, refetch],
   );
 
   return (

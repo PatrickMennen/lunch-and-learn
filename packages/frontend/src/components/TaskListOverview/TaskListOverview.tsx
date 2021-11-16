@@ -21,7 +21,7 @@ gql`
 
 export const TaskListOverview: React.FC = () => {
   const { taskListId } = useParams();
-  const { data, loading, error } = useTaskListDetailsQuery({
+  const { data, loading, error, refetch } = useTaskListDetailsQuery({
     variables: { taskListId: Number(taskListId) },
   });
 
@@ -52,7 +52,7 @@ export const TaskListOverview: React.FC = () => {
             ))}
           </ul>
         )}
-        <CreateTask />
+        <CreateTask refetch={refetch} />
       </>
     )
   );

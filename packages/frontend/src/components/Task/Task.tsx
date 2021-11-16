@@ -62,13 +62,15 @@ export const Task: React.FC<TaskProps> = ({ taskId }) => {
     });
   }, [data, taskId, updateTask]);
 
-  if (loading || !data || !data.task) {
+  if (loading || !data) {
     return null;
   }
 
   return (
-    <li onClick={updateTaskHandler} className={taskClasses}>
-      {data.task.label}
-    </li>
+    data && (
+      <li onClick={updateTaskHandler} className={taskClasses}>
+        {data.task!.label}
+      </li>
+    )
   );
 };
