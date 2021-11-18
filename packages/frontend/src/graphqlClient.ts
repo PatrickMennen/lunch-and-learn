@@ -20,7 +20,24 @@ const splitLink = split(
   httpLink,
 );
 
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        task: {
+          read(_, { args, toReference }) {
+            return toReference({
+              __typename: 'Task',
+              id: args!.where.id,
+            });
+          },
+        },
+      },
+    },
+  },
+});
+
 export const client = new ApolloClient({
   link: splitLink,
-  cache: new InMemoryCache(),
+  cache,
 });
